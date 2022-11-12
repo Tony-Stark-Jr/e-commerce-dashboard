@@ -5,6 +5,9 @@ import Footer from './Components/Footer';
 import SignUp from './Components/SignUp';
 import PrivateComponent from './Components/PrivateComponent';
 import Login from './Components/Login';
+import AddProduct from './Components/AddProduct';
+import Products from './Components/Products';
+import UpdateProduct from './Components/UpdateProduct';
 
 
 function App() {
@@ -16,9 +19,9 @@ function App() {
 
           <Route element={<PrivateComponent />}>
 
-            <Route path='/' element={<h1>Product Listing Component</h1>} />
-            <Route path='/add' element={<h1>Product Listing Component</h1>} />
-            <Route path='/update' element={<h1>Product Listing Component</h1>} />
+            <Route path='/' element={<Products/>} />
+            <Route path='/add' element={<AddProduct/>} />
+            <Route path='/update/:id' element={<UpdateProduct/>} />
             <Route path='/logout' element={<h1>Product Listing Component</h1>} />
             <Route path='/profile' element={<h1>Profile</h1>} />
 
