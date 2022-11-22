@@ -1,35 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'
 
 const UpdateProduct = () => {
+    const [name, setName] = React.useState('');
+    const [price, setPrice] = React.useState('');
+    const [category, setCategory] = React.useState('');
+    const [company, setCompnay] = React.useState('');
+    const params = useParams();
+    const navigate = useNavigate();
 
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("")
-    const [category, setCategory] = useState("")
-    const [company, setCompany] = useState("")
+    useEffect(() => {
+        getProductDetails();
+    })
 
+    const getProductDetails = async () => {
+        console.warn(params)
+        let result = await fetch(`http://localhost:5000/product/${params.id}`);
+        result = await result.json();
+        setName(result.name);
+        setPrice(result.price);
+        setCategory(result.category);
+        setCompnay(result.company)
+    }
 
     const updateProduct = async () => {
-        console.log(name, price, category, company)
+        console.warn(name, price, category, company)
+        let result = await fetch(`http://localhost:5000/product/${params.id}`, {
+            method: 'Put',
+            body: JSON.stringify({ name, price, category, company }),
+            headers: {
+                'Content-Type': 'Application/json'
+            }
+        });
+        result = await result.json();
+        if (result) {
+            navigate('/')
+        }
+
     }
 
     return (
         <div className='product'>
-            <h1>Update product</h1>
+            <h1>Update Product</h1>
+            <input type="text" placeholder='Enter product name' className='inputBox'
+                value={name} onChange={(e) => { setName(e.target.value) }}
+            />
 
-            <input type="text" className="inputBox" onChange={(e) => setName(e.target.value)} value={name} placeholder='Enter product name' />
+            <input type="text" placeholder='Enter product price' className='inputBox'
+                value={price} onChange={(e) => { setPrice(e.target.value) }}
+            />
+
+            <input type="text" placeholder='Enter product category' className='inputBox'
+                value={category} onChange={(e) => { setCategory(e.target.value) }}
+            />
+
+            <input type="text" placeholder='Enter product company' className='inputBox'
+                value={company} onChange={(e) => { setCompnay(e.target.value) }}
+            />
 
 
-            <input type="text" className="inputBox" onChange={(e) => setPrice(e.target.value)} value={price} placeholder='Enter product price' />
-
-
-
-            <input type="text" className="inputBox" onChange={(e) => setCategory(e.target.value)} value={category} placeholder='Enter product category' />
-
-
-            <input type="text" className="inputBox" onChange={(e) => setCompany(e.target.value)} value={company} placeholder='Enter product company' />
-
-
-            <button onClick={updateProduct} className="appButton">Update Product</button>
+            <button onClick={updateProduct} className='appButton'>Update Product</button>
         </div>
     )
 }
